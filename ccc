@@ -4,23 +4,25 @@
 
 mkdir -p /tmp/ccc
 WGET=`command -v wget 2> /dev/null`
-# for some reason curl isn't working for me and I don't want to bother to debug it #CURL=`command -v curl 2> /dev/null`
-SERVICE_URL="https://catholicculture.org/culture/library/catechism/randomcatechism.cfm"
+CURL=`command -v curl 2> /dev/null`
+SERVICE_URL="https://www.catholicculture.org/culture/library/catechism/randomcatechism.cfm"
 
-if [ -n $WGET ]
+#
+#elif [ -n $CURL ]
+if [ -n $CURL ]
+then
+  if ! $CURL -s -o /tmp/ccc/random.html $SERVICE_URL > /dev/null 2>&1
+  then
+    echo "Service not available"
+    exit 1
+  fi
+elif [ -n $WGET ]
 then
   if ! $WGET -O /tmp/ccc/random.html $SERVICE_URL > /dev/null 2>&1
   then
     echo "Service not available"
     exit 1
   fi
-#elif [ -n $CURL ]
-#then
-#  if ! $CURL -s -o /tmp/ccc/random.html $SERVICE_URL
-#  then
-#    echo "Service not available"
-#    exit 1
-#  fi
 else
   echo "Please install wget"
   exit 2
